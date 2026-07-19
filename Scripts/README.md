@@ -2,17 +2,17 @@
 
 #### Logs de hoje
 ```text
-GET /opensearch-net-2026-07-18/_search
+GET /analiselogsopensearch-2026-07-19/_search
 ```
 
 #### Busca refinada procurando especificamente pelo nome do seu controlador para ignorar os ruídos do sistema
 ```text
-GET /opensearch-net-2026-07-18/_search?q=logger:opensearch_net.Controllers.ProdutosController
+GET /analiselogsopensearch-2026-07-19/_search?q=logger:opensearch_net.Controllers.ProdutosController
 ```
 
 #### Descobrir como os dados estão estruturados
 ```text 
-GET /opensearch-net-*/_search
+GET /analiselogsopensearch-*/_search
 {
   "size": 3,
   "query": {
@@ -30,7 +30,7 @@ GET /opensearch-net-*/_search
 
 #### Último documento bruto inserido
 ```text
-GET /opensearch-net-*/_search
+GET /analiselogsopensearch-*/_search
 {
   "size": 1,
   "query": {
@@ -49,7 +49,7 @@ GET /opensearch-net-*/_search
 #### Query de Agrupamento (Aggregation) por Tipo de Erro/Log
 - Descubra a quantidade exata de mensagens divididas por nível (Info, Warning, Error) para criar gráficos de pizza ou barras:
 ```text
-GET /opensearch-net-*/_search
+GET /analiselogsopensearch-*/_search
 {
   "size": 0,
   "aggs": {
@@ -64,7 +64,7 @@ GET /opensearch-net-*/_search
 
 #### Verificar se o Log de Fato Existe no Índice Geral
 ```text
-GET /opensearch-net-*/_search
+GET /analiselogsopensearch-*/_search
 {
   "size": 5,
   "query": {
@@ -75,7 +75,7 @@ GET /opensearch-net-*/_search
 
 #### Limpar e recriar o índice de forma perfeita
 ```text
-DELETE /opensearch-net-2026-07-18
+DELETE /analiselogsopensearch-2026-07-19
 ```
 
 #### Criar o Pipeline de Extração JSON
@@ -110,7 +110,7 @@ PUT _ingest/pipeline/descompactar-json-nlog
 
 #### Testar a Busca com o Pipeline Ativo
 ```text
-POST /opensearch-net-*/_search?pipeline=descompactar-json-nlog
+POST /analiselogsopensearch-*/_search?pipeline=descompactar-json-nlog
 {
   "query": {
     "match": {
@@ -122,12 +122,11 @@ POST /opensearch-net-*/_search?pipeline=descompactar-json-nlog
 
 #### Tornar Pipeline Extração Automático para Sempre
 ```text
-PUT /opensearch-net-*/_settings
+PUT /analiselogsopensearch-*/_settings
 {
   "index.default_pipeline": "descompactar-json-nlog"
 }
 ```
-
 
 #### Testar a extração simulando um documento
 ```text
@@ -147,7 +146,7 @@ POST _ingest/pipeline/descompactar-json-nlog/_simulate
 
 #### Ativar o Pipeline de forma definitiva no Índice
 ```text
-PUT /opensearch-net-*/_settings
+PUT /analiselogsopensearch-*/_settings
 {
   "index.default_pipeline": "descompactar-json-nlog"
 }
@@ -155,7 +154,7 @@ PUT /opensearch-net-*/_settings
 
 #### Atualizar os logs antigos 
 ```text
-POST /opensearch-net-*/_update_by_query?pipeline=descompactar-json-nlog
+POST /analiselogsopensearch-*/_update_by_query?pipeline=descompactar-json-nlog
 {
   "query": {
     "match_all": {}
@@ -165,7 +164,7 @@ POST /opensearch-net-*/_update_by_query?pipeline=descompactar-json-nlog
 
 #### Faça uma nova chamada na sua API C# para gerar um novo ID e tente novamente a sua busca original
 ```text
-GET /opensearch-net-*/_search
+GET /analiselogsopensearch-*/_search
 {
   "query": {
     "term": {
@@ -177,7 +176,7 @@ GET /opensearch-net-*/_search
 
 #### Buscar por esse spanId específico
 ```text
-GET /opensearch-net-*/_search
+GET /analiselogsopensearch-*/_search
 {
   "query": {
     "term": {
@@ -189,7 +188,7 @@ GET /opensearch-net-*/_search
 
 #### Busca combinanda (Trace e Span)
 ```text
-GET /opensearch-net-*/_search
+GET /analiselogsopensearch-*/_search
 {
   "query": {
     "bool": {
@@ -204,7 +203,7 @@ GET /opensearch-net-*/_search
 
 #### Agrupar logs para descobrir a jornada da requisição
 ```text
-GET /opensearch-net-*/_search
+GET /analiselogsopensearch-*/_search
 {
   "query": {
     "term": {
@@ -219,7 +218,7 @@ GET /opensearch-net-*/_search
 
 #### Contar quantos Spans diferentes cada rota gera (Métrica)
 ```text
-GET /opensearch-net-*/_search
+GET /analiselogsopensearch-*/_search
 {
   "size": 0,
   "aggs": {
@@ -237,7 +236,7 @@ GET /opensearch-net-*/_search
 
 #### Descobrir gargalos de desempenho (Spans lentos)
 ```text
-GET /opensearch-net-*/_search
+GET /analiselogsopensearch-*/_search
 {
   "size": 5,
   "query": {
