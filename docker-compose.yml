@@ -1,0 +1,48 @@
+services:
+  analiselogsopensearch:
+    image: analiselogsopensearch:latest
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    build:
+      context: ./AnaliseLogsOpenSearch
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+      - OpenSearch__Url=http://opensearch:9200
+      - NODE_ENV=development
+    depends_on:
+      opensearch:
+        condition: service_healthy
+
+  opensearch:
+    image: opensearchproject/opensearch:latest
+    environment:
+      - node.name=opensearch
+      - cluster.name=opensearch-cluster
+      - discovery.type=single-node
+      - "DISABLE_SECURITY_PLUGIN=true"
+      # Correção 1: Desativa o Performance Analyzer para evitar o erro de arquivo ausente
+      - "DISABLE_PERFORMANCE_ANALYZER_PLUGIN_AGENT=true"
+      # Correção 2: Força o limite real de memória em 512MB para ambiente local
+      - "OPENSEARCH_JAVA_OPTS=-Xms512m -Xmx512m"
+    ports:
+      - "9200:9200"
+      - "9600:9600"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9200"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+      start_period: 15s
+
+  opensearch-dashboards:
+    image: opensearchproject/opensearch-dashboards:latest
+    ports:
+      - "5601:5601"
+    environment:
+      - OPENSEARCH_HOSTS=["http://opensearch:9200"]
+      - DISABLE_SECURITY_DASHBOARDS_PLUGIN=true
+    depends_on:
+      opensearch:
+        condition: service_healthy
