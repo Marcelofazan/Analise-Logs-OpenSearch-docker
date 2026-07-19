@@ -1,4 +1,4 @@
-## DevTools-DQL 
+## OpenSearch prompt DQL - DevTools
 
 #### Logs de hoje
 ```text
